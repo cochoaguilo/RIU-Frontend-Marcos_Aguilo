@@ -1,0 +1,76 @@
+<div class="hero-container">
+  <!-- Formulario -->
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ editingHeroId() ? 'Editar Héroe' : 'Registrar Nuevo Héroe' }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form  (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre del Héroe</mat-label>
+            <input matInput [formField]="heroForm.name" placeholder="Ej: Superman">
+            <!-- <mat-error *ngIf="heroForm.get('name')?.hasError('required')">
+              El nombre es requerido
+            </mat-error>
+            <mat-error *ngIf="heroForm.get('name')?.hasError('minlength')">
+              Mínimo 3 caracteres
+            </mat-error> -->
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Poder</mat-label>
+            <input matInput [formField]="heroForm.power" placeholder="Ej: Superfuerza">
+            <!-- <mat-error *ngIf="heroForm.get('power')?.hasError('required')">
+              El poder es requerido
+            </mat-error>
+            <mat-error *ngIf="heroForm.get('power')?.hasError('minlength')">
+              Mínimo 2 caracteres
+            </mat-error> -->
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput [formField]="heroForm.description" placeholder="Ej: Vuela y tiene visión de rayos X" rows="3"></textarea>
+            <!-- <mat-error *ngIf="heroForm.get('description')?.hasError('minlength')">
+              Mínimo 5 caracteres
+            </mat-error> -->
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit">
+            {{ editingHeroId() ? 'Actualizar' : 'Registrar' }}
+          </button>
+          @if (editingHeroId()) {
+            <button mat-raised-button (click)="cancelEdit()" type="button">
+              Cancelar
+            </button>
+          }
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Búsqueda -->
+  <mat-card class="search-card">
+    <mat-card-header>
+      <mat-card-title>Buscar Héroes</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Buscar por nombre</mat-label>
+        <input matInput placeholder="Ej: man" (keyup)="searchHeroes($event.target.value)">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  
+</div>
