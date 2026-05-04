@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, linkedSignal, signal } from '@angular/core';
 import { Hero } from './hero';
 
 @Injectable({
@@ -53,6 +53,8 @@ export class HeroService {
   }
 
   delete(id: number): boolean {
+    console.log(id);
+    
     const beforeCount = this._heroes().length;
     this._heroes.update((current) => current.filter((hero) => hero.id !== id));
     return this._heroes().length < beforeCount;

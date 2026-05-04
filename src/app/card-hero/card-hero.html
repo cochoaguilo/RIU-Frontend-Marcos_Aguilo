@@ -1,0 +1,18 @@
+<mat-card class="hero-card">
+    <mat-card-header>
+        <mat-card-title>{{ hero().name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <p><strong>ID:</strong> {{ hero().id }}</p>
+        <p><strong>Poder:</strong> {{ hero().power }}</p>
+        <p><strong>Descripción:</strong> {{ hero().description }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-icon-button color="primary" (click)="onEdit()" title="Editar">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="onDelete()" title="Eliminar">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>

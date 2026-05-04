@@ -1,0 +1,27 @@
+<mat-toolbar>
+  <div class="heroes-header">
+    @if (windowWidth() > 768) {
+      <span>Mis Héroes</span>
+    }
+    <button mat-icon-button class="example-icon plus-icon" aria-label="Agregar héroe" (click)="addHero.emit()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <mat-button-toggle-group
+    [value]="viewMode()"
+    (change)="onViewModeChange($event.value)"
+    aria-label="Modo de vista"
+  >
+    <mat-button-toggle value="table"><mat-icon>table_view</mat-icon>{{windowWidth() <= 768 ? '' : 'Tabla'}}</mat-button-toggle>
+    <mat-button-toggle value="card"><mat-icon fontIcon="dataset">dataset</mat-icon>{{windowWidth() <= 768 ? '' : 'Tarjeta'}}</mat-button-toggle>
+  </mat-button-toggle-group>
+  <div>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar héroe</mat-label>
+      <input matInput placeholder="Ej: Superman" [value]="heroValue()" (input)="search.emit($event.target.value)">
+      <button mat-icon-button matSuffix aria-label="Search" (click)="search.emit('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</mat-toolbar>

@@ -1,66 +1,72 @@
-<mat-toolbar>
-  <span>Mis Héroes</span>
-  <span class="example-spacer"></span>
-  <button matIconButton class="example-icon plus-icon" aria-label="Example icon-button with heart icon">
-    <mat-icon>add</mat-icon>
-  </button>
-</mat-toolbar>
+@if (windowWidth() <= 768) {
+  <h2>Mis Héroes</h2>
+}
+
+<app-toolbar (viewModeChange)="viewMode.set($event)" (search)="searchHeroes($event)" (addHero)="addEditHero()"></app-toolbar>
 
 <!-- Tabla de Héroes -->
-  
 
 <mat-card class="heroes-card">
-    <mat-card-header>
-      <mat-card-title>Héroes Registrados ({{ heroes().length }})</mat-card-title>
-    </mat-card-header>
 
     <mat-card-content>
-      <table mat-table [dataSource]="heroes()" class="heroes-table">
-        <!-- ID Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>ID</th>
-          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-        </ng-container>
+      <!-- Vista Tabla -->
+      @if (viewMode() === 'table') {
+        <table mat-table [dataSource]="heroes()" class="heroes-table">
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          </ng-container>
 
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Nombre</th>
-          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-        </ng-container>
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
 
-        <!-- Power Column -->
-        <ng-container matColumnDef="power">
-          <th mat-header-cell *matHeaderCellDef>Poder</th>
-          <td mat-cell *matCellDef="let element">{{ element.power }}</td>
-        </ng-container>
+          <!-- Power Column -->
+          <ng-container matColumnDef="power">
+            <th mat-header-cell *matHeaderCellDef>Poder</th>
+            <td mat-cell *matCellDef="let element">{{ element.power }}</td>
+          </ng-container>
 
-        <!-- Description Column -->
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef>Descripción</th>
-          <td mat-cell *matCellDef="let element">{{ element.description }}</td>
-        </ng-container>
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Descripción</th>
+            <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+          </ng-container>
 
-        <!-- Actions Column -->
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Acciones</th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-icon-button color="primary" (click)="editHero(element)" title="Editar">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteHero(element.id)" title="Eliminar">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="primary" (click)="addEditHero(element)" title="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteHero(element.id)" title="Eliminar">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      }
+
+      <!-- Vista Tarjetas -->
+      @if (viewMode() === 'card') {
+        <div class="cards-container">
+          @for (hero of heroes(); track hero.id) {
+            <app-card-hero [hero]="hero" (edit)="addEditHero($event)" (delete)="deleteHero($event)"></app-card-hero>
+          }
+        </div>
+      }
+
       @if (heroes().length === 0) {
         <div class="no-data">
-        <p>No hay héroes registrados</p>
-      </div>
+          <p>No hay héroes registrados</p>
+        </div>
       }
-      
     </mat-card-content>
   </mat-card>
