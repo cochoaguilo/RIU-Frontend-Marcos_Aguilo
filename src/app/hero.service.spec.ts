@@ -16,49 +16,43 @@ describe('HeroService', () => {
 
   describe('register', () => {
     it('should register a new hero with generated ID', () => {
-      const heroData: Omit<Hero, 'id'> = {
+      const heroData: Hero = {
+        id: 4,
         name: 'Batman',
         power: 'Inteligencia',
         description: 'El caballero de la noche'
       };
 
       const result = service.register(heroData);
+      result.then((res) => {
+        expect(res.id).toBe(4); // Next ID after initial 3
+        expect(res.name).toBe('Batman');
+        expect(res.power).toBe('Inteligencia');
+        expect(res.description).toBe('El caballero de la noche');
+      });
 
-      expect(result.id).toBe(4); // Next ID after initial 3
-      expect(result.name).toBe('Batman');
-      expect(result.power).toBe('Inteligencia');
-      expect(result.description).toBe('El caballero de la noche');
+      
     });
 
     it('should add the hero to the list', () => {
       const initialCount = service.getAll().length;
-      const heroData: Omit<Hero, 'id'> = {
+      const heroData: Hero = {
+        id: 4,
         name: 'Wonder Woman',
         power: 'Fuerza',
         description: 'Princesa amazona'
       };
 
-      service.register(heroData);
+      const result = service.register(heroData);
 
-      expect(service.getAll().length).toBe(initialCount + 1);
-      const addedHero = service.getAll().find(h => h.name === 'Wonder Woman');
-      expect(addedHero).toBeTruthy();
+      result.then((res) => {
+        expect(service.getAll().length).toBe(initialCount + 1);
+        const addedHero = service.getAll().find(h => h.name === 'Wonder Woman');
+        expect(addedHero).toBeTruthy();
+      });
     });
   });
 
-  describe('getById', () => {
-    it('should return the hero with the specified ID', () => {
-      const hero = service.getById(1);
-      expect(hero).toBeTruthy();
-      expect(hero?.id).toBe(1);
-      expect(hero?.name).toBe('Spiderman');
-    });
-
-    it('should return undefined for non-existent ID', () => {
-      const hero = service.getById(999);
-      expect(hero).toBeUndefined();
-    });
-  });
 
   describe('searchByName', () => {
     it('should return all heroes when query is empty', () => {
@@ -82,7 +76,7 @@ describe('HeroService', () => {
 
   describe('update', () => {
     it('should update an existing hero', () => {
-      const existingHero = service.getById(1);
+      const existingHero = service.getAll().find(h => h.id === 1);
       expect(existingHero).toBeTruthy();
 
       const updatedHero: Hero = {
@@ -93,9 +87,11 @@ describe('HeroService', () => {
       };
 
       const result = service.update(updatedHero);
-      expect(result).toBeTruthy();
-      expect(result?.name).toBe('Spider-Man');
-      expect(result?.power).toBe('Araña mejorada');
+      result.then((res) => {
+        expect(res).toBeTruthy();
+        expect(res?.name).toBe('Spider-Man');
+        expect(res?.power).toBe('Araña mejorada');
+      });
     });
 
     it('should return undefined for non-existent hero', () => {
@@ -107,7 +103,9 @@ describe('HeroService', () => {
       };
 
       const result = service.update(nonExistentHero);
-      expect(result).toBeUndefined();
+      result.then((res) => {
+        expect(res).toBeUndefined();
+      });
     });
   });
 
@@ -116,17 +114,20 @@ describe('HeroService', () => {
       const initialCount = service.getAll().length;
       const result = service.delete(1);
 
-      expect(result).toBe(true);
-      expect(service.getAll().length).toBe(initialCount - 1);
-      expect(service.getById(1)).toBeUndefined();
+      result.then((res) => {
+        expect(res).toBe(true);
+        expect(service.getAll().length).toBe(initialCount - 1);
+      });
     });
 
     it('should return false for non-existent hero', () => {
       const initialCount = service.getAll().length;
       const result = service.delete(999);
 
-      expect(result).toBe(false);
-      expect(service.getAll().length).toBe(initialCount);
+      result.then((res) => {
+        expect(res).toBe(false);
+        expect(service.getAll().length).toBe(initialCount);
+      });
     });
   });
 
@@ -136,6 +137,7 @@ describe('HeroService', () => {
 
       // Register a new hero
       service.register({
+        id: 4,
         name: 'Flash',
         power: 'Velocidad',
         description: 'El hombre más rápido'

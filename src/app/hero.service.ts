@@ -11,34 +11,34 @@ export class HeroService {
     { id: 3, name: 'Manolito el fuerte', power: 'Resistencia', description: 'Un héroe local con gran fuerza' }
   ]);
 
-  get heroes(): Hero[] {
-    return [...this._heroes()];
-  }
+  heroId = signal<number >(4); // Inicializamos el ID en 4, ya que tenemos 3 héroes predefinidos
+  heroesList = linkedSignal(this._heroes);
 
-  register(hero: Omit<Hero, 'id'>): Hero {
-    const nextId = this.generateNextId();
-    const newHero: Hero = { id: nextId, ...hero };
+
+  async register(hero: Hero): Promise<Hero> {
+    
+    const nextId = this.heroId();
+    const newHero: Hero = { ...hero, id: nextId };// Asignamos el ID generado al nuevo héroe
+    
     this._heroes.update((current) => [...current, newHero]);
+    this.heroId.set(nextId + 1);
     return newHero;
   }
 
   getAll(): Hero[] {
-    return this.heroes;
+    return this.heroesList();
   }
 
-  getById(id: number): Hero | undefined {
-    return this._heroes().find((hero) => hero.id === id);
-  }
 
   searchByName(query: string): Hero[] {
     const normalized = query?.trim().toLowerCase();
     if (!normalized) {
-      return this.heroes;
+      return this.heroesList();
     }
     return this._heroes().filter((hero) => hero.name.toLowerCase().includes(normalized));
   }
 
-  update(hero: Hero): Hero | undefined {
+  async update(hero: Hero): Promise<Hero | undefined> {
     let updatedHero: Hero | undefined;
     this._heroes.update((current) =>
       current.map((item) => {
@@ -52,16 +52,11 @@ export class HeroService {
     return updatedHero;
   }
 
-  delete(id: number): boolean {
-    console.log(id);
-    
+  async delete(id: number): Promise<boolean> {    
     const beforeCount = this._heroes().length;
     this._heroes.update((current) => current.filter((hero) => hero.id !== id));
     return this._heroes().length < beforeCount;
   }
 
-  private generateNextId(): number {
-    const heroes = this._heroes();
-    return heroes.length ? Math.max(...heroes.map((hero) => hero.id)) + 1 : 1;
-  }
+
 }

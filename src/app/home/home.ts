@@ -14,6 +14,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CardHero } from '../card-hero/card-hero';
 import { Toolbar } from '../toolbar/toolbar';
 import { ConfirmDialog, ConfirmDialogData } from '../confirm-dialog/confirm-dialog';
+import { Table } from '../table/table';
 
 
 
@@ -31,6 +32,7 @@ import { ConfirmDialog, ConfirmDialogData } from '../confirm-dialog/confirm-dial
     MatCheckboxModule,
     CardHero,
     Toolbar,
+    Table
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',

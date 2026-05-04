@@ -35,14 +35,7 @@ export class Form implements OnInit{
   heroData = inject(MAT_DIALOG_DATA) as Hero | null;  // Recibir los datos
 
   heroesModel = signal<Hero>({ id: 0, name: '', power: '', description: '' });
-  editingHeroId = signal<number | null>(null);
-  displayedColumns: { name: string; label: string; placeholder: string }[] = [
-    { name: 'id', label: 'ID', placeholder: 'ID' },
-    { name: 'name', label: 'Nombre', placeholder: 'Nombre' },
-    { name: 'power', label: 'Poder', placeholder: 'Poder' },
-    { name: 'description', label: 'Descripción', placeholder: 'Descripción' },
-    { name: 'actions', label: 'Acciones', placeholder: 'Acciones' }
-  ];
+
   private heroService = inject(HeroService);
   private snackBar = inject(MatSnackBar);
   private dialogRef = inject(MatDialogRef<Form>, { optional: true });
@@ -85,7 +78,6 @@ export class Form implements OnInit{
         this.snackBar.open('Héroe registrado exitosamente', 'Cerrar', { duration: 3000 });
       }
 
-      //this.heroForm.reset();
       this.dialogRef?.close();
     } catch (error) {
       this.snackBar.open('Error al procesar el héroe', 'Cerrar', { duration: 3000 });
@@ -96,7 +88,6 @@ export class Form implements OnInit{
 
   cancelEdit(): void {
     this.dialogRef?.close();
-    //this.heroForm.reset();
   }
 
 
