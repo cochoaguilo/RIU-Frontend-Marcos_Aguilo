@@ -10,7 +10,7 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Nombre del Héroe</mat-label>
-            <input matInput [formField]="heroForm.name" appUppercase placeholder="Ej: Superman">
+            <input matInput [formField]="heroForm.name" appUppercase (outputValue)="changeNameToUppercase($event)" placeholder="Ej: Superman">
           </mat-form-field>
           @if (heroForm.name().invalid() && heroForm.name().touched()) {
                 @for (error of heroForm.name().errors(); track error) {
@@ -23,12 +23,13 @@
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Poder</mat-label>
             <input matInput [formField]="heroForm.power" placeholder="Ej: Superfuerza">
-            @if (heroForm.power().invalid() && heroForm.power().touched()) {
+            
+          </mat-form-field>
+          @if (heroForm.power().invalid() && heroForm.power().touched()) {
                 @for (error of heroForm.power().errors(); track error) {
                 <mat-error>{{ error.message }}</mat-error>
                 }
             }
-          </mat-form-field>
           
         </div>
 

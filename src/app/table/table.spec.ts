@@ -1,7 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { vi } from 'vitest';
 
 import { Table } from './table';
 import { Hero } from '../hero';
@@ -48,6 +47,8 @@ describe('Table', () => {
     hostComponent.heroes.set(heroes);
     hostFixture.detectChanges();
     await hostFixture.whenStable();
+    hostFixture.detectChanges();
+    await hostFixture.whenRenderingDone();
   });
 
   it('should create', () => {

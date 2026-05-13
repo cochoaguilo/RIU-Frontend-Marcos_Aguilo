@@ -1,18 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, signal } from '@angular/core';
+import { Component, linkedSignal, signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { vi } from 'vitest';
-
 import { CardHero } from './card-hero';
 import { Hero } from '../hero';
 
+const testHero: Hero = {
+  id: 1,
+  name: 'Test Hero',
+  power: 'Speed',
+  description: 'El mejor héroe de prueba',
+};
 @Component({
   selector: 'test-host',
   template: '<app-card-hero [hero]="hero()" (edit)="onEdit($event)" (delete)="onDelete($event)"></app-card-hero>',
   imports: [CardHero],
 })
 class TestHostComponent {
-  hero = signal<Hero>(null as any);
+  hero = signal<Hero>(testHero);
   editedHero: Hero | null = null;
   deletedId: number | null = null;
 
@@ -29,12 +33,7 @@ describe('CardHero', () => {
   let hostComponent: TestHostComponent;
   let hostFixture: ComponentFixture<TestHostComponent>;
   let cardHeroComponent: CardHero;
-  const testHero: Hero = {
-    id: 1,
-    name: 'Test Hero',
-    power: 'Speed',
-    description: 'El mejor héroe de prueba',
-  };
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

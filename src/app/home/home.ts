@@ -15,10 +15,12 @@ import { CardHero } from '../card-hero/card-hero';
 import { Toolbar } from '../toolbar/toolbar';
 import { ConfirmDialog, ConfirmDialogData } from '../confirm-dialog/confirm-dialog';
 import { Table } from '../table/table';
+import { Loader } from '../loader/loader';
 
 
 
 @Component({
+  standalone: true,
   selector: 'app-home',
   imports: [
     MatFormFieldModule,
@@ -32,7 +34,8 @@ import { Table } from '../table/table';
     MatCheckboxModule,
     CardHero,
     Toolbar,
-    Table
+    Table,
+    Loader
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -48,6 +51,7 @@ export class Home {
   private dialogRef = viewChild<ElementRef>('heroForm');
   viewMode = signal<'table' | 'card'>('table');
   windowWidth = signal<number>(window.innerWidth);
+  isLoading = signal<boolean>(false);
 
   constructor(
   ) {
@@ -55,7 +59,12 @@ export class Home {
   }
 
   private loadHeroes(): void {
-    this.heroes.set(this.heroService.getAll());
+    this.isLoading.set(true);
+    setTimeout(() => {
+      this.heroes.set(this.heroService.getAll());
+      this.isLoading.set(false);
+    }, 1000);
+    
   }
 
   deleteHero(id: number): void {

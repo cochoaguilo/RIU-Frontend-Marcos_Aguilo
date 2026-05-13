@@ -15,7 +15,7 @@ export class HeroService {
   heroesList = linkedSignal(this._heroes);
 
 
-  async register(hero: Hero): Promise<Hero> {
+  register(hero: Hero): Hero {
     
     const nextId = this.heroId();
     const newHero: Hero = { ...hero, id: nextId };// Asignamos el ID generado al nuevo héroe
@@ -38,7 +38,7 @@ export class HeroService {
     return this._heroes().filter((hero) => hero.name.toLowerCase().includes(normalized));
   }
 
-  async update(hero: Hero): Promise<Hero | undefined> {
+  update(hero: Hero): Hero | undefined {
     let updatedHero: Hero | undefined;
     this._heroes.update((current) =>
       current.map((item) => {
@@ -52,7 +52,7 @@ export class HeroService {
     return updatedHero;
   }
 
-  async delete(id: number): Promise<boolean> {    
+  delete(id: number): boolean {    
     const beforeCount = this._heroes().length;
     this._heroes.update((current) => current.filter((hero) => hero.id !== id));
     return this._heroes().length < beforeCount;

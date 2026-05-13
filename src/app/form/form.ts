@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,10 +35,18 @@ export class Form implements OnInit{
   heroData = inject(MAT_DIALOG_DATA) as Hero | null;  // Recibir los datos
 
   heroesModel = signal<Hero>({ id: 0, name: '', power: '', description: '' });
-
+  editingHeroId = signal<number | null>(null);
+  displayedColumns: { name: string; label: string; placeholder: string }[] = [
+    { name: 'id', label: 'ID', placeholder: 'ID' },
+    { name: 'name', label: 'Nombre', placeholder: 'Nombre' },
+    { name: 'power', label: 'Poder', placeholder: 'Poder' },
+    { name: 'description', label: 'Descripción', placeholder: 'Descripción' },
+    { name: 'actions', label: 'Acciones', placeholder: 'Acciones' }
+  ];
   private heroService = inject(HeroService);
   private snackBar = inject(MatSnackBar);
   private dialogRef = inject(MatDialogRef<Form>, { optional: true });
+  private cdr = inject(ChangeDetectorRef);
 
   heroForm = form(this.heroesModel, (schemaPath) => {
       debounce(schemaPath.name, 500);
@@ -47,11 +55,12 @@ export class Form implements OnInit{
       required(schemaPath.power, { message: 'El poder es obligatorio' });
     },
     {
+      
       submission: {
         action: async (field) => {
           console.log(field().value());
-          this.onSubmit(field().value(), this.heroesModel().id > 0);
           
+          this.onSubmit(field().value(), this.heroesModel().id > 0);
         },
       },
     },
@@ -67,14 +76,14 @@ export class Form implements OnInit{
 
  
 
-  async onSubmit(formValue: Hero, editing: boolean): Promise<void> {
+   onSubmit(formValue: Hero, editing: boolean): void {
 
     try {
       if (editing) {
-        await this.heroService.update(formValue);
+        this.heroService.update(formValue);
         this.snackBar.open('Héroe actualizado exitosamente', 'Cerrar', { duration: 3000 });
       } else {
-        await this.heroService.register(formValue);
+        this.heroService.register(formValue);
         this.snackBar.open('Héroe registrado exitosamente', 'Cerrar', { duration: 3000 });
       }
 
@@ -88,6 +97,12 @@ export class Form implements OnInit{
 
   cancelEdit(): void {
     this.dialogRef?.close();
+  }
+
+  changeNameToUppercase(uppercasedName: string): void {
+    this.heroesModel.update(hero => ({ ...hero, name: uppercasedName }));
+    this.heroForm.name().value.set(uppercasedName);
+    this.cdr.detectChanges();
   }
 
 

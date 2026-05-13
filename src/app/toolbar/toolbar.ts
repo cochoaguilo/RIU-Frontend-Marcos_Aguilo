@@ -1,4 +1,4 @@
-import { Component, output, signal, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, output, signal, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatLabel } from '@angular/material/form-field';
@@ -20,7 +20,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   styleUrl: './toolbar.scss',
   encapsulation: ViewEncapsulation.None
 })
-export class Toolbar {
+export class Toolbar implements OnDestroy {
   windowWidth = signal<number>(window.innerWidth);
   viewMode = signal<'table' | 'card'>('table');
   viewModeChange = output<'table' | 'card'>();
@@ -44,5 +44,12 @@ export class Toolbar {
   onViewModeChange(value: string): void {
     this.viewMode.set(value as 'table' | 'card');
     this.viewModeChange.emit(this.viewMode());
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', () => {
+      this.windowWidth.set(window.innerWidth);
+      this.viewMode.set(this.windowWidth() <= 768 ? 'card' : 'table');
+    });
   }
 }

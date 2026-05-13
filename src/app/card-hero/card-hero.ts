@@ -11,7 +11,7 @@ import { Hero } from '../hero';
   styleUrl: './card-hero.scss',
 })
 export class CardHero {
-  hero = input.required<Hero>();
+  hero = input.required<Hero >();
   edit = output<Hero>();
   delete = output<number>();
 

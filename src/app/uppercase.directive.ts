@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, output } from '@angular/core';
 
 @Directive({
   selector: '[appUppercase]',
@@ -6,7 +6,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 })
 export class UppercaseDirective {
   constructor(private readonly elementRef: ElementRef<HTMLInputElement>) {}
-
+  outputValue = output<string>();
   @HostListener('input', ['$event'])
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -15,8 +15,9 @@ export class UppercaseDirective {
     const element = this.elementRef.nativeElement;
 
     if (element.value !== uppercased) {
-      element.value = uppercased;
-      element.dispatchEvent(new Event('input', { bubbles: true }));
+      /* element.value = uppercased;
+      element.dispatchEvent(new Event('input', { bubbles: true })); */
+      this.outputValue.emit(uppercased);
     }
   }
 }

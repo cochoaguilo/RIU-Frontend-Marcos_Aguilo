@@ -24,14 +24,10 @@ describe('HeroService', () => {
       };
 
       const result = service.register(heroData);
-      result.then((res) => {
-        expect(res.id).toBe(4); // Next ID after initial 3
-        expect(res.name).toBe('Batman');
-        expect(res.power).toBe('Inteligencia');
-        expect(res.description).toBe('El caballero de la noche');
-      });
-
-      
+      expect(result.id).toBe(4); // Next ID after initial 3
+      expect(result.name).toBe('Batman');
+      expect(result.power).toBe('Inteligencia');
+      expect(result.description).toBe('El caballero de la noche');
     });
 
     it('should add the hero to the list', () => {
@@ -43,13 +39,11 @@ describe('HeroService', () => {
         description: 'Princesa amazona'
       };
 
-      const result = service.register(heroData);
+      service.register(heroData);
 
-      result.then((res) => {
-        expect(service.getAll().length).toBe(initialCount + 1);
-        const addedHero = service.getAll().find(h => h.name === 'Wonder Woman');
-        expect(addedHero).toBeTruthy();
-      });
+      expect(service.getAll().length).toBe(initialCount + 1);
+      const addedHero = service.getAll().find(h => h.name === 'Wonder Woman');
+      expect(addedHero).toBeTruthy();
     });
   });
 
@@ -87,11 +81,10 @@ describe('HeroService', () => {
       };
 
       const result = service.update(updatedHero);
-      result.then((res) => {
-        expect(res).toBeTruthy();
-        expect(res?.name).toBe('Spider-Man');
-        expect(res?.power).toBe('Araña mejorada');
-      });
+    
+      expect(result).toBeTruthy();
+      expect(result?.name).toBe('Spider-Man');
+      expect(result?.power).toBe('Araña mejorada');
     });
 
     it('should return undefined for non-existent hero', () => {
@@ -103,9 +96,7 @@ describe('HeroService', () => {
       };
 
       const result = service.update(nonExistentHero);
-      result.then((res) => {
-        expect(res).toBeUndefined();
-      });
+      expect(result).toBeUndefined();
     });
   });
 
@@ -114,20 +105,16 @@ describe('HeroService', () => {
       const initialCount = service.getAll().length;
       const result = service.delete(1);
 
-      result.then((res) => {
-        expect(res).toBe(true);
-        expect(service.getAll().length).toBe(initialCount - 1);
-      });
+      expect(result).toBe(true);
+      expect(service.getAll().length).toBe(initialCount - 1);
     });
 
     it('should return false for non-existent hero', () => {
       const initialCount = service.getAll().length;
       const result = service.delete(999);
 
-      result.then((res) => {
-        expect(res).toBe(false);
-        expect(service.getAll().length).toBe(initialCount);
-      });
+      expect(result).toBe(false);
+      expect(service.getAll().length).toBe(initialCount);
     });
   });
 
